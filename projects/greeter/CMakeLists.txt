@@ -1,3 +1,4 @@
+project(greeter)
 add_library(greeter)
 target_compile_features(greeter PUBLIC cxx_std_17)
 

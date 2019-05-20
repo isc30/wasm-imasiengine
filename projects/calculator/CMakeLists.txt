@@ -1,3 +1,4 @@
+project(calculator)
 add_library(calculator)
 
 # Testing
