@@ -1,6 +1,6 @@
 #include "Greeter.hpp"
 
-std::string Greeter::Greet(std::string_view name) const noexcept
+std::string Greeter::Greet(const std::string& name) const noexcept
 {
     if (name == "Ivan")
     {

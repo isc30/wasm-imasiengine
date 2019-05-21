@@ -1,0 +1,64 @@
+language: cpp
+
+env:
+  global:
+    - CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow"
+
+# Use Latest CMake
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake-data
+      - cmake
+
+# Build Agents
+matrix:
+  include:
+
+    # Gcc 9 Environment
+    - name: gcc 9
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+      env:
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
+
+    # Clang 8 Environment
+    - name: clang 8
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-8
+          packages:
+            - clang-8
+      env:
+        - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
+
+# Configure Environment
+before_install:
+  - eval "${MATRIX_EVAL}"
+
+# Configure CMake
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} ..
+
+# Build
+script:
+  - cmake --build .
+
+# Run Tests
+after_script:
+  - cmake --build . --target test

@@ -1,7 +1,7 @@
 project(calculator)
 add_library(calculator)
 
-# Testing
+# Tests
 add_subdirectory(tests)
 
 # Includes
