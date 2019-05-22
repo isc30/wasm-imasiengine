@@ -49,11 +49,9 @@ matrix:
 before_install:
   - eval "${MATRIX_EVAL}"
 
-# Configure CMake
+# Configure
 before_script:
-  - mkdir build
-  - cd build
-  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} ..
+  - cmake ${CMAKE_OPTIONS} -DCMAKE_CXX_FLAGS=${CXX_FLAGS} .
 
 # Build
 script:
@@ -61,4 +59,4 @@ script:
 
 # Run Tests
 after_script:
-  - cmake --build . --target test
+  - ctest -V
