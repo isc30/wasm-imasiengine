@@ -39,7 +39,6 @@ else()
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} 
         --force-new-ctest-process --output-on-failure)
 endif()
-set_target_properties(check PROPERTIES FOLDER "Scripts")
 
 #include_directories(${gtest_SOURCE_DIR}/include)
 
@@ -63,15 +62,12 @@ macro(add_gtest TESTNAME)
             gtest_add_tests(TARGET ${TESTNAME}
                             TEST_PREFIX "${TESTNAME}."
                             TEST_LIST TmpTestList)
-            set_tests_properties(${TmpTestList} PROPERTIES FOLDER "tests")
         else()
             gtest_discover_tests(${TESTNAME}
-                TEST_PREFIX "${TESTNAME}."
-                PROPERTIES FOLDER "tests")
+                TEST_PREFIX "${TESTNAME}.")
         endif()
     else()
         add_test(${TESTNAME} ${TESTNAME})
-        set_target_properties(${TESTNAME} PROPERTIES FOLDER "tests")
     endif()
 
 endmacro()
@@ -86,6 +82,3 @@ mark_as_advanced(
     BUILD_GMOCK
     BUILD_GTEST
 )
-
-set_target_properties(gtest gtest_main gmock gmock_main
-    PROPERTIES FOLDER "Extern")
