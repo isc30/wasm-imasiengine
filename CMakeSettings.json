@@ -1,32 +1,51 @@
 ﻿{
-    "configurations": [
-        {
-            "name": "x64-Debug",
-            "buildRoot": "${projectDir}\\out\\build\\${name}",
-            "installRoot": "${projectDir}\\build\\install\\${name}",
-            "generator": "Ninja",
-            "configurationType": "Debug",
-            "inheritEnvironments": [ "msvc_x64_x64" ],
-            "cmakeCommandArgs": "",
-            "buildCommandArgs": "-v",
-            "ctestCommandArgs": "",
-            "variables": [
-                {
-                    "name": "SDL2_PATH",
-                    "value": "${projectDir}\\thirdparty\\SDL2-2.0.9",
-                    "type": "PATH",
-                },
-            ],
-        },
-        {
-            "name": "WASM",
-            "buildRoot": "${projectDir}\\out\\build\\${name}",
-            "installRoot": "${projectDir}\\build\\install\\${name}",
-            "configurationType": "Debug",
-            "variables": [],
-            "cmakeToolchain": "${projectDir}\\toolchains\\emscripten.cmake",
-            "buildCommandArgs": "",
-            "generator": "Ninja"
-        }
-    ]
+  "configurations": [
+    {
+      "name": "x64-Debug",
+      "buildRoot": "${projectDir}\\build\\${name}",
+      "installRoot": "${projectDir}\\build\\install\\${name}",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "variables": [
+        /*{
+          "name": "SDL2_PATH",
+          "value": "${projectDir}\\thirdparty\\SDL2-2.0.9",
+          "type": "STRING"
+        }*/
+      ]
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}\\build\\${name}",
+      "installRoot": "${projectDir}\\build\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        /*{
+          "name": "SDL2_PATH",
+          "value": "${projectDir}\\thirdparty\\SDL2-2.0.9",
+          "type": "STRING"
+        }*/
+      ]
+    },
+    {
+      "name": "Wasm-Debug",
+      "buildRoot": "${projectDir}\\build\\${name}",
+      "installRoot": "${projectDir}\\build\\install\\${name}",
+      "configurationType": "Debug",
+      "variables": [],
+      "cmakeToolchain": "${projectDir}\\toolchains\\emscripten.cmake",
+      "buildCommandArgs": "",
+      "generator": "Ninja",
+      "inheritEnvironments": []
+    }
+  ]
 }
