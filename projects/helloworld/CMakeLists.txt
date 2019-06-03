@@ -2,8 +2,8 @@ project(hello_world)
 add_executable(hello_world)
 
 # Dependencies
-add_dependencies(hello_world calculator)
-target_link_libraries(hello_world PRIVATE calculator)
+target_link_libraries(hello_world PUBLIC calculator)
+target_link_libraries(hello_world PUBLIC SDL2 SDL2main)
 
 # Includes
 target_include_directories(hello_world
