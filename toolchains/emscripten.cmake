@@ -10,3 +10,6 @@ include("$ENV{EMSCRIPTEN}/cmake/Modules/Platform/Emscripten.cmake")
 
 string(APPEND CMAKE_CXX_FLAGS_INIT " -s WASM=1")
 string(APPEND CMAKE_CXX_FLAGS_INIT " -s ERROR_ON_UNDEFINED_SYMBOLS=1")
+
+string(APPEND CMAKE_CXX_FLAGS_INIT " -s USE_SDL=2")
+
