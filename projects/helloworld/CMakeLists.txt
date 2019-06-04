@@ -1,6 +1,10 @@
 project(hello_world)
 add_executable(hello_world)
 
+if(DEFINED EMSCRIPTEN)
+    set_target_properties(hello_world PROPERTIES SUFFIX ".html")
+endif()
+
 # Dependencies
 target_link_libraries(hello_world PUBLIC calculator)
 

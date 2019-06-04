@@ -52,6 +52,18 @@ else()
     find_file(SDL2_LIBRARY_DLL
         NAMES ${SDL2_LIBRARY_NAME}.dll
         PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
+
+    # Find SDL2main
+    find_library(SDL2main_LIBRARY
+        NAME SDL2main
+        PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
+
+    # Populate useful variables
+    get_filename_component(SDL2main_LIBRARY_DIR ${SDL2main_LIBRARY} DIRECTORY)
+    get_filename_component(SDL2main_LIBRARY_NAME ${SDL2main_LIBRARY} NAME_WE)
+
+    # Mark library as required for the linker
+    set(SDL2main_LIBRARY_NEEDED SDL2main_LIBRARY)
 endif()
 
 # Include dir (declare SDL2_INCLUDE_DIR)
@@ -65,6 +77,17 @@ message("[SDL2] SDL2_LIBRARY_NAME: " ${SDL2_LIBRARY_NAME})
 message("[SDL2] SDL2_LIBRARY: " ${SDL2_LIBRARY})
 message("[SDL2] SDL2_LIBRARY_DLL: " ${SDL2_LIBRARY_DLL})
 
+# Resolve SDL2_LIBRARY
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(SDL2 DEFAULT_MSG
+    ${SDL2_LIBRARY_NEEDED} SDL2_INCLUDE_DIR)
+
+# Resolve SDL2main_LIBRARY
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(SDL2main DEFAULT_MSG
+    ${SDL2main_LIBRARY_NEEDED} SDL2_INCLUDE_DIR)
+
+# SDL2 target
 if(SDL2_FOUND AND NOT TARGET SDL2::SDL2)
     message("[SDL2] Using precompiled libraries")
 
@@ -73,37 +96,12 @@ if(SDL2_FOUND AND NOT TARGET SDL2::SDL2)
     target_link_libraries(SDL2::SDL2 INTERFACE ${SDL2_LIBRARY_NEEDED})
 endif()
 
-# Imported targets for Components
-foreach(_component ${SDL2_FIND_COMPONENTS})
-    string(TOUPPER ${_component} _COMPONENT)
+# SDL2main target
+if(SDL2main_FOUND AND NOT TARGET SDL2::SDL2main)
+    message("[SDL2main] Using precompiled libraries")
 
-    message("Searching for ${_COMPONENT}")
-
-    if(TARGET SDL2::${_component})
-        set(SDL2_${_COMPONENT}_FOUND TRUE)
-    else()
-
-        add_library(SDL2::${_component} INTERFACE IMPORTED)
-
-        if(_component MATCHES "SDL2main")
-
-            find_library(SDL2main_LIBRARY
-                NAME SDL2main
-                PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
-
-            target_link_libraries(SDL2::${_component} INTERFACE ${SDL2main_LIBRARY})
-        endif()
-
-        add_library(SDL2::${_component} INTERFACE IMPORTED)
-        target_include_directories(SDL2::${_COMPONENT} INTERFACE ${SDL2_INCLUDE_DIR})
-        target_link_libraries(SDL2::${_COMPONENT} INTERFACE ${SDL2_LIBRARY_NEEDED})
-    endif()
-endforeach()
-
-# Resolve package
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SDL2
-    REQUIRED_VARS ${SDL2_LIBRARY_NEEDED} SDL2_INCLUDE_DIR
-    HANDLE_COMPONENTS)
+    add_library(SDL2::SDL2main INTERFACE IMPORTED)
+    target_link_libraries(SDL2::SDL2main INTERFACE ${SDL2main_LIBRARY_NEEDED})
+endif()
 
 mark_as_advanced(SDL2_FOUND SDL2_INCLUDE_DIR SDL2_LIBRARY_DIR SDL2_LIBRARY SDL2_LIBRARY_DLL)
