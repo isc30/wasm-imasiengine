@@ -10,13 +10,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "variables": [
-        /*{
-          "name": "SDL2_PATH",
-          "value": "${projectDir}\\thirdparty\\SDL2-2.0.9",
-          "type": "STRING"
-        }*/
-      ]
+      "variables": []
     },
     {
       "name": "x64-Release",
@@ -28,13 +22,7 @@
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": [
-        /*{
-          "name": "SDL2_PATH",
-          "value": "${projectDir}\\thirdparty\\SDL2-2.0.9",
-          "type": "STRING"
-        }*/
-      ]
+      "variables": []
     },
     {
       "name": "Wasm-Debug",

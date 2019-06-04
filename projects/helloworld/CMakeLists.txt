@@ -6,8 +6,8 @@ target_link_libraries(hello_world PUBLIC calculator)
 
 find_package(SDL2 REQUIRED)
 target_link_libraries(hello_world PUBLIC
-    SDL2
-    SDL2main)
+    SDL2::SDL2
+    SDL2::SDL2main)
 
 # Includes
 target_include_directories(hello_world
