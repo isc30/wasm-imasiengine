@@ -28,6 +28,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-9
+            - libsdl2-dev
       env:
         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 
@@ -42,6 +43,7 @@ matrix:
             - llvm-toolchain-trusty-8
           packages:
             - clang-8
+            - libsdl2-dev
       env:
         - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
 
