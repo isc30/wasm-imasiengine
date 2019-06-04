@@ -30,7 +30,7 @@ target_sources(hello_world
 
 # Copy SDL2 DLL to output folder on Windows
 if(NOT DEFINED EMSCRIPTEN AND WIN32)
-    foreach(DLL ${SDL2_DLL})
+    foreach(DLL ${SDL2_LIBRARY_DLLS})
         add_custom_command(TARGET hello_world POST_BUILD COMMAND
             ${CMAKE_COMMAND} -E copy_if_different ${DLL} $<TARGET_FILE_DIR:hello_world>)
     endforeach()

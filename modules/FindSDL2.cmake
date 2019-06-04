@@ -49,7 +49,7 @@ else()
     set(SDL2_LIBRARY_NEEDED SDL2_LIBRARY)
 
     # Export current shared DLL for Windows
-    find_file(SDL2_LIBRARY_DLL
+    find_file(SDL2_LIBRARY_DLLS
         NAMES ${SDL2_LIBRARY_NAME}.dll
         PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
 
@@ -57,10 +57,6 @@ else()
     find_library(SDL2main_LIBRARY
         NAME SDL2main
         PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
-
-    # Populate useful variables
-    get_filename_component(SDL2main_LIBRARY_DIR ${SDL2main_LIBRARY} DIRECTORY)
-    get_filename_component(SDL2main_LIBRARY_NAME ${SDL2main_LIBRARY} NAME_WE)
 
     # Mark library as required for the linker
     set(SDL2main_LIBRARY_NEEDED SDL2main_LIBRARY)
@@ -75,17 +71,20 @@ message("[SDL2] SDL2_INCLUDE_DIR: " ${SDL2_INCLUDE_DIR})
 message("[SDL2] SDL2_LIBRARY_DIR: " ${SDL2_LIBRARY_DIR})
 message("[SDL2] SDL2_LIBRARY_NAME: " ${SDL2_LIBRARY_NAME})
 message("[SDL2] SDL2_LIBRARY: " ${SDL2_LIBRARY})
-message("[SDL2] SDL2_LIBRARY_DLL: " ${SDL2_LIBRARY_DLL})
+message("[SDL2] SDL2_LIBRARY_DLLS: " ${SDL2_LIBRARY_DLLS})
+
+# Resolve libraries
+include(FindPackageHandleStandardArgs)
 
 # Resolve SDL2_LIBRARY
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SDL2 DEFAULT_MSG
-    ${SDL2_LIBRARY_NEEDED} SDL2_INCLUDE_DIR)
+find_package_handle_standard_args(SDL2 REQUIRED_VARS
+    SDL2_INCLUDE_DIR
+    ${SDL2_LIBRARY_NEEDED})
 
 # Resolve SDL2main_LIBRARY
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SDL2main DEFAULT_MSG
-    ${SDL2main_LIBRARY_NEEDED} SDL2_INCLUDE_DIR)
+find_package_handle_standard_args(SDL2main REQUIRED_VARS
+    SDL2_INCLUDE_DIR
+    ${SDL2main_LIBRARY_NEEDED})
 
 # SDL2 target
 if(SDL2_FOUND AND NOT TARGET SDL2::SDL2)
@@ -93,7 +92,7 @@ if(SDL2_FOUND AND NOT TARGET SDL2::SDL2)
 
     add_library(SDL2::SDL2 INTERFACE IMPORTED)
     target_include_directories(SDL2::SDL2 INTERFACE ${SDL2_INCLUDE_DIR})
-    target_link_libraries(SDL2::SDL2 INTERFACE ${SDL2_LIBRARY_NEEDED})
+    target_link_libraries(SDL2::SDL2 INTERFACE ${SDL2_LIBRARY})
 endif()
 
 # SDL2main target
@@ -101,7 +100,14 @@ if(SDL2main_FOUND AND NOT TARGET SDL2::SDL2main)
     message("[SDL2main] Using precompiled libraries")
 
     add_library(SDL2::SDL2main INTERFACE IMPORTED)
-    target_link_libraries(SDL2::SDL2main INTERFACE ${SDL2main_LIBRARY_NEEDED})
+    target_link_libraries(SDL2::SDL2main INTERFACE ${SDL2main_LIBRARY})
 endif()
 
-mark_as_advanced(SDL2_FOUND SDL2_INCLUDE_DIR SDL2_LIBRARY_DIR SDL2_LIBRARY SDL2_LIBRARY_DLL)
+mark_as_advanced(SDL2_FOUND SDL2_INCLUDE_DIR SDL2_LIBRARY_DIR SDL2_LIBRARY SDL2_LIBRARY_DLLS)
+mark_as_advanced(SDL2main_FOUND SDL2main_LIBRARY)
+
+# Enable EMSCRIPTEN compiler flags for SDL2
+if (DEFINED EMSCRIPTEN)
+    string(APPEND CMAKE_CXX_FLAGS " -s USE_WEBGL2=1")
+    string(APPEND CMAKE_CXX_FLAGS " -s USE_SDL=2")
+endif()
