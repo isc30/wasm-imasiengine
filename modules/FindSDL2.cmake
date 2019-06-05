@@ -31,12 +31,12 @@ else()
 
     # Find Debug library
     find_library(SDL2_LIBRARY_DEBUG
-        NAME SDL2d
+        NAMES SDL2d SDL-2.0d
         PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
 
     # Find Release library
     find_library(SDL2_LIBRARY_RELEASE
-        NAME SDL2
+        NAMES SDL2 SDL-2.0
         PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
     
     # Set SDL2_LIBRARY based on current build configuration
@@ -50,14 +50,6 @@ else()
     find_file(SDL2_LIBRARY_DLLS
         NAMES SDL2.dll
         PATH_SUFFIXES ${_SDL2_BIN_PATH_SUFFIX} ${_SDL2_LIBRARY_PATH_SUFFIX})
-
-    # Find SDL2main
-    find_library(SDL2main_LIBRARY
-        NAME SDL2main
-        PATH_SUFFIXES ${_SDL2_LIBRARY_PATH_SUFFIX})
-
-    # Mark library as required for the linker
-    set(SDL2main_LIBRARY_NEEDED SDL2main_LIBRARY)
 endif()
 
 # Include dir (declare SDL2_INCLUDE_DIR)
@@ -68,41 +60,27 @@ find_path(SDL2_INCLUDE_DIR
 message("[SDL2] SDL2_INCLUDE_DIR: " ${SDL2_INCLUDE_DIR})
 message("[SDL2] SDL2_LIBRARY: " ${SDL2_LIBRARY})
 message("[SDL2] SDL2_LIBRARY_DLLS: " ${SDL2_LIBRARY_DLLS})
-message("")
-message("[SDL2main] SDL2main_LIBRARY: " ${SDL2main_LIBRARY})
 
-# Resolve libraries
+# Resolve package (errors if includes aren't found)
 include(FindPackageHandleStandardArgs)
-
-# Resolve SDL2_LIBRARY
 find_package_handle_standard_args(SDL2 REQUIRED_VARS
     SDL2_INCLUDE_DIR
     ${SDL2_LIBRARY_NEEDED})
 
-# Resolve SDL2main_LIBRARY
-find_package_handle_standard_args(SDL2main REQUIRED_VARS
+# Advance GUI variables
+mark_as_advanced(
+    SDL2_PATH
+    SDL2_FOUND
+    SDL2_LIBRARY
     SDL2_INCLUDE_DIR
-    ${SDL2main_LIBRARY_NEEDED})
+    SDL2_LIBRARY_DLLS)
 
-# SDL2 target
-if(SDL2_FOUND AND NOT TARGET SDL2::SDL2)
-    message("[SDL2] Using precompiled libraries")
-
-    add_library(SDL2::SDL2 INTERFACE IMPORTED)
-    target_include_directories(SDL2::SDL2 INTERFACE ${SDL2_INCLUDE_DIR})
-    target_link_libraries(SDL2::SDL2 INTERFACE ${SDL2_LIBRARY})
+# SDL2::Core target
+if(SDL2_FOUND AND NOT TARGET SDL2::Core)
+    add_library(SDL2::Core INTERFACE IMPORTED)
+    target_include_directories(SDL2::Core INTERFACE ${SDL2_INCLUDE_DIR})
+    target_link_libraries(SDL2::Core INTERFACE ${SDL2_LIBRARY})
 endif()
-
-# SDL2main target
-if(SDL2main_FOUND AND NOT TARGET SDL2::SDL2main)
-    message("[SDL2main] Using precompiled libraries")
-
-    add_library(SDL2::SDL2main INTERFACE IMPORTED)
-    target_link_libraries(SDL2::SDL2main INTERFACE ${SDL2main_LIBRARY})
-endif()
-
-mark_as_advanced(SDL2_FOUND SDL2_INCLUDE_DIR SDL2_LIBRARY SDL2_LIBRARY_DLLS)
-mark_as_advanced(SDL2main_FOUND SDL2main_LIBRARY)
 
 # Enable EMSCRIPTEN compiler flags for SDL2 and WebGL
 if (DEFINED EMSCRIPTEN)

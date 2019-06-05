@@ -9,9 +9,7 @@ endif()
 target_link_libraries(hello_world PUBLIC calculator)
 
 find_package(SDL2 REQUIRED)
-target_link_libraries(hello_world PUBLIC
-    SDL2::SDL2
-    SDL2::SDL2main)
+target_link_libraries(hello_world PUBLIC SDL2::Core)
 
 # Includes
 target_include_directories(hello_world

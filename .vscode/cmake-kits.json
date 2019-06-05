@@ -1,0 +1,12 @@
+[
+    {
+        "name": "VS2019 x64 (project)",
+        "visualStudio": "VisualStudio.16.0",
+        "visualStudioArchitecture": "amd64"
+    },
+    {
+        "name": "Emscripten (project)",
+        "toolchainFile": "C:/Working/own/wasm-imasiengine/toolchains/emscripten.cmake",
+        "preferredGenerator": { "name": "Ninja" }
+    }
+]
