@@ -1,8 +1,7 @@
-# DownloadProject
-include(downloadproject/DownloadProject.cmake)
+set(MSVC2017_COMPATIBILITY ON CACHE BOOL "Force compatibility mode for Visual Studio 2017")
 
-# Google Test
-add_subdirectory_with_folder("GoogleTest" googletest)
+# Corrade
+add_subdirectory(corrade)
 
 # SDL2
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
@@ -12,3 +11,17 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Emscripten")
 endif()
+
+if(DEFINED SDL2_PATH)
+    list(APPEND CMAKE_PREFIX_PATH ${SDL2_PATH})
+endif()
+
+# Magnum
+set(WITH_SDL2APPLICATION ON CACHE BOOL "Force SDL application")
+add_subdirectory(magnum)
+
+# DownloadProject
+include(downloadproject/DownloadProject.cmake)
+
+# Google Test
+add_subdirectory(googletest)

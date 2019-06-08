@@ -5,8 +5,15 @@
         "visualStudioArchitecture": "amd64"
     },
     {
-        "name": "Emscripten (project)",
-        "toolchainFile": "C:/Working/own/wasm-imasiengine/toolchains/emscripten.cmake",
-        "preferredGenerator": { "name": "Ninja" }
+        "name": "Emscripten ASM.js (project)",
+        "preferredGenerator": { "name": "MinGW Makefiles" },
+        "toolchainFile": "${workspaceRoot}\\toolchains\\generic\\Emscripten.cmake",
+        "environmentVariables": { "CMAKE_SH": "CMAKE_SH-NOTFOUND" }
+    },
+    {
+        "name": "Emscripten WASM (project)",
+        "preferredGenerator": { "name": "MinGW Makefiles" },
+        "toolchainFile": "${workspaceRoot}\\toolchains\\generic\\Emscripten-wasm.cmake",
+        "environmentVariables": { "CMAKE_SH": "CMAKE_SH-NOTFOUND" }
     }
 ]
