@@ -2,12 +2,14 @@ version: '1.0.{build}'
 
 environment:
   matrix:
-    - os: Visual Studio 2019
-      platform: x86
-      configuration: Debug
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      platform: x64
+      configuration: Release
+      toolchain: "a"
 
-    - toolchain: "toolchains/generic/Emscripten.cmake"
-      configuration: Debug
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+    #   toolchain: "toolchains/generic/Emscripten.cmake"
+    #   configuration: Release
 
 # Configure Environment
 install:
@@ -15,7 +17,7 @@ install:
 
 # Configure
 before_build:
-  - cmake . -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%"
+  - cmake . -DCMAKE_TOOLCHAIN_FILE="%toolchain%"
 
 # Build
 build_script:
