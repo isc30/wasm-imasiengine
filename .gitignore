@@ -3,10 +3,9 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-bin/
 build/
 
 # Visual Studio
 .vs/
 .vscode/
-out/*
+out/

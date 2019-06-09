@@ -67,7 +67,9 @@ macro(add_gtest TESTTARGET)
                 TEST_PREFIX "${TESTTARGET}.")
         endif()
     else()
-        add_test(NAME ${TESTTARGET} COMMAND $<TARGET_FILE:${TESTTARGET}>)
+        add_test(
+            NAME ${TESTTARGET}
+            COMMAND $<TARGET_FILE:${TESTTARGET}>)
     endif()
 
 endmacro()
