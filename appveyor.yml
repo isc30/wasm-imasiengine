@@ -33,7 +33,7 @@ install:
 
 # Configure
 before_build:
-  - cmake -A "%PLATFORM%". -DCMAKE_TOOLCHAIN_FILE="%toolchain%" -DCMAKE_BUILD_TYPE="%CONFIGURATION%"
+  - cmake -A "%PLATFORM%" . -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%" -DCMAKE_BUILD_TYPE="%CONFIGURATION%"
 
 # Build
 build_script:
