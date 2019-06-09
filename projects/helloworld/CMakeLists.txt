@@ -33,10 +33,12 @@ target_sources(Game
 
 # Copy SDL2 DLL to output folder on Windows
 if(NOT CORRADE_TARGET_EMSCRIPTEN AND WIN32)
+    find_package(SDL2 REQUIRED)
     add_custom_command(TARGET Game POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_BIN_DIR}/SDL2.dll $<TARGET_FILE_DIR:Game>)
 endif()
 
 if(CORRADE_TARGET_EMSCRIPTEN)
+
     set(Game_INSTALL_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/Game.html
         ${MAGNUM_EMSCRIPTENAPPLICATION_JS}
