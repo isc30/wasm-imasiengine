@@ -1,16 +1,13 @@
 version: '1.0.{build}'
 
-os:
-  - Visual Studio 2017
-  - Visual Studio 2019
+environment:
+  matrix:
+    - os: Visual Studio 2019
+      platform: x86
+      configuration: Debug
 
-platform:
-  - x86
-  - x64
- 
-configuration:
-  - Debug
-  - Release
+    - toolchain: "toolchains/generic/Emscripten.cmake"
+      configuration: Debug
 
 # Configure Environment
 install:
@@ -18,7 +15,7 @@ install:
 
 # Configure
 before_build:
-  - cmake .
+  - cmake . -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%"
 
 # Build
 build_script:
