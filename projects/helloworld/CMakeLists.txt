@@ -39,19 +39,19 @@ endif()
 
 if(CORRADE_TARGET_EMSCRIPTEN)
 
-    set(Game_INSTALL_FILES
+    set(GAME_INSTALL_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/Game.html
         ${MAGNUM_EMSCRIPTENAPPLICATION_JS}
         ${MAGNUM_WEBAPPLICATION_CSS})
 
-    foreach(INSTALL_FILE ${Game_INSTALL_FILES})
+    foreach(INSTALL_FILE ${GAME_INSTALL_FILES})
         add_custom_command(TARGET Game POST_BUILD COMMAND
             ${CMAKE_COMMAND} -E copy_if_different ${INSTALL_FILE} $<TARGET_FILE_DIR:Game>)
     endforeach()
 
     install(TARGETS Game DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-    install(FILES ${Game_INSTALL_FILES}
+    install(FILES ${GAME_INSTALL_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX})
 
     install(FILES
