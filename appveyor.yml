@@ -2,6 +2,8 @@ version: '1.0.{build}'
 
 environment:
   matrix:
+    fast_finish: true
+    
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       platform: x64
       configuration: Release
