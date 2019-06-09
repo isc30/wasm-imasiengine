@@ -1,45 +1,60 @@
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <iostream>
+#include <Magnum/GL/DefaultFramebuffer.h>
+#include <Magnum/Platform/Sdl2Application.h>
 
-#include "Calculator.hpp"
+#include <Magnum/GL/Buffer.h>
+#include <Magnum/GL/DefaultFramebuffer.h>
+#include <Magnum/GL/Mesh.h>
+#include <Magnum/Platform/Sdl2Application.h>
+#include <Magnum/Shaders/VertexColor.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+using namespace Magnum;
 
-int main(int argc, char* args[])
+class MyApplication: public Platform::Application
 {
-    SDL_Window* window = NULL;
-    SDL_Surface* screenSurface = NULL;
+    public:
+        explicit MyApplication(const Arguments& arguments);
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    private:
+        void drawEvent() override;
+
+        GL::Mesh _mesh;
+        Shaders::VertexColor2D _shader;
+};
+
+MyApplication::MyApplication(const Arguments& arguments)
+    : Platform::Application{arguments}
+{
+    using namespace Math::Literals;
+
+    struct TriangleVertex
     {
-        fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-        return 1;
-    }
+        Vector2 position;
+        Color3 color;
+    };
 
-    window = SDL_CreateWindow(
-        "hello_sdl2",
-        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        SDL_WINDOW_SHOWN);
-
-    if (window == NULL)
+    const TriangleVertex data[]
     {
-        std::cerr << "could not create window: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+        {{-0.5f, -0.5f}, 0xff0000_rgbf},    /* Left vertex, red color */
+        {{ 0.5f, -0.5f}, 0x00ff00_rgbf},    /* Right vertex, green color */
+        {{ 0.0f,  0.5f}, 0x0000ff_rgbf}     /* Top vertex, blue color */
+    };
 
-    std::cout << "Test!" << std::endl;
+    GL::Buffer buffer;
+    buffer.setData(data);
 
-    screenSurface = SDL_GetWindowSurface(window);
-
-    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0x00, 0x00));
-    SDL_UpdateWindowSurface(window);
-
-    // commented just to see the red screen
-    //SDL_DestroyWindow(window);
-    //SDL_Quit();
-
-    return 0;
+    _mesh.setCount(3)
+         .addVertexBuffer(std::move(buffer), 0,
+            Shaders::VertexColor2D::Position{},
+            Shaders::VertexColor2D::Color3{});
 }
+
+void MyApplication::drawEvent()
+{
+    GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
+
+    _mesh.draw(_shader);
+
+    swapBuffers();
+}
+
+MAGNUM_APPLICATION_MAIN(MyApplication)

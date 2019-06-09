@@ -5,12 +5,27 @@ os:
   - Visual Studio 2019
 
 platform:
-  - x86
   - x64
- 
+
 configuration:
-  - Debug
   - Release
+
+matrix:
+  fast_finish: true
+
+# environment:
+#   matrix:
+#     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+#       platform: x64
+#       configuration: Release
+
+#     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+#       platform: x64
+#       configuration: Release
+
+#     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+#       toolchain: "toolchains/generic/Emscripten.cmake"
+#       configuration: Release
 
 # Configure Environment
 install:
@@ -18,12 +33,12 @@ install:
 
 # Configure
 before_build:
-  - cmake .
+  - cmake -A "%PLATFORM%" . -DCMAKE_TOOLCHAIN_FILE="%TOOLCHAIN%" -DCMAKE_BUILD_TYPE="%CONFIGURATION%"
 
 # Build
 build_script:
-  - cmake --build .
+  - cmake --build . --config "%CONFIGURATION%"
 
 # Run Tests
 test_script:
-  - ctest -V
+  - ctest -V -C "%CONFIGURATION%"

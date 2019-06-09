@@ -1,16 +1,20 @@
 project(Game)
 add_executable(Game)
 
-# Helpful
-if(DEFINED EMSCRIPTEN)
-    set_target_properties(Game PROPERTIES SUFFIX ".html")
-endif()
+# Strict Compilation
+set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 
 # Dependencies
-target_link_libraries(Game PUBLIC calculator)
+find_package(Magnum REQUIRED
+    GL
+    Shaders
+    Sdl2Application)
 
-find_package(SDL2 REQUIRED)
-target_link_libraries(Game PUBLIC SDL2::SDL2)
+target_link_libraries(Game PRIVATE
+    Magnum::Application
+    Magnum::GL
+    Magnum::Shaders
+    Magnum::Magnum)
 
 # Includes
 target_include_directories(Game
@@ -28,27 +32,26 @@ target_sources(Game
 )
 
 # Copy SDL2 DLL to output folder on Windows
-if(NOT DEFINED EMSCRIPTEN AND WIN32)
-    foreach(DLL ${SDL2_LIBRARY_DLLS})
-        add_custom_command(TARGET Game POST_BUILD COMMAND
-            ${CMAKE_COMMAND} -E copy_if_different ${DLL} $<TARGET_FILE_DIR:Game>)
-    endforeach()
+if(NOT CORRADE_TARGET_EMSCRIPTEN AND WIN32)
+    find_package(SDL2 REQUIRED)
+    add_custom_command(TARGET Game POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${SDL2_BIN_DIR}/SDL2.dll $<TARGET_FILE_DIR:Game>)
 endif()
 
-if(DEFINED EMSCRIPTEN)
-    set(Game_INSTALL_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/assets/Gaame.html
+if(CORRADE_TARGET_EMSCRIPTEN)
+
+    set(GAME_INSTALL_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets/Game.html
         ${MAGNUM_EMSCRIPTENAPPLICATION_JS}
         ${MAGNUM_WEBAPPLICATION_CSS})
 
-    foreach(INSTALL_FILE ${Game_INSTALL_FILES})
+    foreach(INSTALL_FILE ${GAME_INSTALL_FILES})
         add_custom_command(TARGET Game POST_BUILD COMMAND
             ${CMAKE_COMMAND} -E copy_if_different ${INSTALL_FILE} $<TARGET_FILE_DIR:Game>)
     endforeach()
 
     install(TARGETS Game DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-    install(FILES ${Game_INSTALL_FILES}
+    install(FILES ${GAME_INSTALL_FILES}
         DESTINATION ${CMAKE_INSTALL_PREFIX})
 
     install(FILES

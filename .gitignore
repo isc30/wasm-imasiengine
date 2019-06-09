@@ -8,4 +8,4 @@ build/
 # Visual Studio
 .vs/
 .vscode/
-out/*
+out/

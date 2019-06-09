@@ -54,7 +54,7 @@
             "installRoot": "${projectDir}\\build\\install\\${name}",
             "configurationType": "Debug",
             "variables": [],
-            "cmakeToolchain": "${projectDir}\\toolchains\\emscripten-wasm.cmake",
+            "cmakeToolchain": "${projectDir}\\toolchains\\generic\\Emscripten-wasm.cmake",
             "buildCommandArgs": "",
             "generator": "Ninja",
             "inheritEnvironments": []
@@ -65,7 +65,7 @@
             "installRoot": "${projectDir}\\build\\install\\${name}",
             "configurationType": "Release",
             "variables": [],
-            "cmakeToolchain": "${projectDir}\\toolchains\\emscripten-wasm.cmake",
+            "cmakeToolchain": "${projectDir}\\toolchains\\generic\\Emscripten-wasm.cmake",
             "buildCommandArgs": "",
             "generator": "Ninja",
             "inheritEnvironments": []
