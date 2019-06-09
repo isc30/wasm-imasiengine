@@ -8,7 +8,7 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       platform: x64
       configuration: Release
-      toolchain: "a"
+      #toolchain: "a"
 
     # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
     #   toolchain: "toolchains/generic/Emscripten.cmake"
