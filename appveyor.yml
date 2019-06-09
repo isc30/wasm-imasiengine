@@ -33,12 +33,12 @@ install:
 
 # Configure
 before_build:
-  - cmake . -DCMAKE_TOOLCHAIN_FILE="%toolchain%"
+  - cmake -A "%PLATFORM%". -DCMAKE_TOOLCHAIN_FILE="%toolchain%" -DCMAKE_BUILD_TYPE="%CONFIGURATION%"
 
 # Build
 build_script:
-  - cmake --build .
+  - cmake --build . --config "%CONFIGURATION%"
 
 # Run Tests
 test_script:
-  - ctest -V
+  - ctest -V -C "%CONFIGURATION%"
