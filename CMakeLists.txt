@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 project(cpp_starter)
 
-# Global CMake Modules
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/modules/")
+# Output Directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-# Enable IDE Folders
-include(AddSubdirectoryWithFolder)
+# Global CMake Modules
+list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/modules")
 
 # Global C++ Standard
 set(CMAKE_CXX_STANDARD 17)
@@ -16,7 +17,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 enable_testing()
 
 # Add ThirdParty Dependecies
-add_subdirectory_with_folder("ThirdParty" thirdparty)
+add_subdirectory(thirdparty)
 
 # Add Projects
-add_subdirectory_with_folder("Projects" projects)
+add_subdirectory(projects)

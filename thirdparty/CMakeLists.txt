@@ -2,7 +2,7 @@
 include(downloadproject/DownloadProject.cmake)
 
 # Google Test
-add_subdirectory_with_folder("GoogleTest" googletest)
+add_subdirectory(googletest)
 
 # SDL2
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
