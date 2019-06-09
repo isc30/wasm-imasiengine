@@ -54,20 +54,20 @@ if(GOOGLE_TEST_INDIVIDUAL)
 endif()
 
 # Target must already exist
-macro(add_gtest TESTNAME)
-    target_link_libraries(${TESTNAME} PUBLIC gtest gmock gtest_main)
+macro(add_gtest TESTTARGET)
+    target_link_libraries(${TESTTARGET} PUBLIC gtest gmock gtest_main)
     
     if(GOOGLE_TEST_INDIVIDUAL)
         if(CMAKE_VERSION VERSION_LESS 3.10)
-            gtest_add_tests(TARGET ${TESTNAME}
-                            TEST_PREFIX "${TESTNAME}."
+            gtest_add_tests(TARGET ${TESTTARGET}
+                            TEST_PREFIX "${TESTTARGET}."
                             TEST_LIST TmpTestList)
         else()
-            gtest_discover_tests(${TESTNAME}
-                TEST_PREFIX "${TESTNAME}.")
+            gtest_discover_tests(${TESTTARGET}
+                TEST_PREFIX "${TESTTARGET}.")
         endif()
     else()
-        add_test(${TESTNAME} ${TESTNAME})
+        add_test(NAME ${TESTTARGET} COMMAND $<TARGET_FILE:${TESTTARGET}>)
     endif()
 
 endmacro()
