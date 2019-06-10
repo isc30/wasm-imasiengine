@@ -2,6 +2,9 @@
 [![AppVeyor](https://img.shields.io/appveyor/ci/isc30/wasm-imasiengine/master.svg?label=vc%2B%2B)](https://ci.appveyor.com/project/isc30/wasm-imasiengine)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
+## Demo
+https://isc30.github.io/wasm-imasiengine/demo/Game.html
+
 ## Clone the repo
 
 ```
