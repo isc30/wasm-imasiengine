@@ -16,7 +16,7 @@ class BouncingBalls
         explicit BouncingBalls(GameContext& context);
         void init();
         void tick();
-        void render(const Magnum::Matrix3& projectionMatrix);
+        void render(float deltaTick, const Magnum::Matrix3& projectionMatrix);
 
     private:
         void createRandomBall();

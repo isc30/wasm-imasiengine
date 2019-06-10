@@ -21,7 +21,7 @@ void BouncingBalls::createRandomBall()
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist_color(0, 0xff);
-    std::uniform_int_distribution<std::mt19937::result_type> dist_speed(1, 50);
+    std::uniform_int_distribution<std::mt19937::result_type> dist_speed(1, 20);
     std::uniform_int_distribution<std::mt19937::result_type> dist_mass(1, 15);
     std::uniform_int_distribution<std::mt19937::result_type> dist_position_x(0, _context.viewportSize.x());
     std::uniform_int_distribution<std::mt19937::result_type> dist_position_y(0, _context.viewportSize.y());
@@ -49,7 +49,7 @@ void BouncingBalls::createRandomBall()
 
     float direction_x = dist_direction(rng) / 1000.f - 1.f;
     float direction_y = dist_direction(rng) / 1000.f - 1.f;
-    float speed = dist_speed(rng) / 10.f;
+    float speed = (float)dist_speed(rng);
 
     _registry.assign<PhysicsComponent>(ball1,
         PhysicsComponent{
@@ -79,7 +79,7 @@ void BouncingBalls::tick()
     _collisionSystem.tick(_registry);
 }
 
-void BouncingBalls::render(const Matrix3& projectionMatrix)
+void BouncingBalls::render(float deltaTick, const Matrix3& projectionMatrix)
 {
-    _renderSystem.render(projectionMatrix, _registry);
+    _renderSystem.render(deltaTick, projectionMatrix, _registry);
 }

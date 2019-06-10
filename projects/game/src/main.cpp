@@ -14,6 +14,8 @@
 using namespace Magnum;
 using namespace Math::Literals;
 
+#include <chrono>
+
 class MyApplication: public Platform::Application
 {
     public:
@@ -31,6 +33,8 @@ class MyApplication: public Platform::Application
 
         GameContext _context;
         BouncingBalls _bouncingBalls{_context};
+
+        std::chrono::steady_clock::time_point _previousTime;
 };
 
 MyApplication::MyApplication(const Arguments& arguments)
@@ -40,6 +44,8 @@ MyApplication::MyApplication(const Arguments& arguments)
     _cameraProjection = Matrix3::projection({static_cast<Vector2>(_context.viewportSize)});
 
     _bouncingBalls.init();
+
+    _previousTime = std::chrono::steady_clock::now();
 
     #ifndef CORRADE_TARGET_EMSCRIPTEN
         setSwapInterval(1);
@@ -65,10 +71,27 @@ void MyApplication::viewportEvent(ViewportEvent& event)
 void MyApplication::drawEvent()
 {
     _context.mousePosition = mouseScreenSpacePosition();
-    _bouncingBalls.tick();
+
+    using DeltaTime = std::chrono::duration<double, std::milli>;
+
+    // Ticks
+    auto newTime = std::chrono::steady_clock::now();
+    DeltaTime deltaTime = newTime - _previousTime;
+
+    using namespace std::chrono_literals;
+    DeltaTime step = 1000ms / 30.0;
+
+    while (deltaTime >= step)
+    {
+        _bouncingBalls.tick();
+        deltaTime -= step;
+        _previousTime = newTime - std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
+    }
+
+    float deltaTick = deltaTime / step;
 
     GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
-    _bouncingBalls.render(_cameraProjection);
+    _bouncingBalls.render(deltaTick, _cameraProjection);
     swapBuffers();
     redraw();
 }

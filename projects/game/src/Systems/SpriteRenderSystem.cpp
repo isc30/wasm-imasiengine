@@ -1,11 +1,13 @@
 #include "SpriteRenderSystem.hpp"
 
+#include "Components/PhysicsComponent.hpp"
 #include "Components/SpriteComponent.hpp"
 #include "Components/TransformComponent.hpp"
 
 using namespace Magnum;
 
 void SpriteRenderSystem::render(
+    float deltaTick,
     const Matrix3& projectionMatrix,
     entt::registry& registry)
 {
@@ -16,7 +18,16 @@ void SpriteRenderSystem::render(
             SpriteComponent& sprite,
             const TransformComponent& transform)
         {
-            Matrix3 translation = Matrix3::translation(transform.position);
+            Vector2 position = transform.position;
+
+            // rendering physics simulation
+            PhysicsComponent* physics = registry.try_get<PhysicsComponent>(entity);
+            if (physics != nullptr)
+            {
+                position += physics->direction * (physics->speed * deltaTick);
+            }
+
+            Matrix3 translation = Matrix3::translation(position);
             Matrix3 scale = Matrix3::scaling(transform.scale);
             Matrix3 modelMatrix = translation * scale;
 
