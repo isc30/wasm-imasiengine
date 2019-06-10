@@ -8,19 +8,24 @@ set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
 find_package(Magnum REQUIRED
     GL
     Shaders
-    Sdl2Application
     MeshTools
     Primitives
     Trade)
 
+if(CORRADE_TARGET_EMSCRIPTEN)
+    find_package(Magnum REQUIRED EmscriptenApplication)
+else()
+    find_package(Magnum REQUIRED Sdl2Application)
+endif()
+
 target_link_libraries(Game PRIVATE
     Magnum::Application
     Magnum::GL
+    Magnum::Magnum
     Magnum::Shaders
     Magnum::MeshTools
     Magnum::Primitives
-    Magnum::Trade
-    Magnum::Magnum)
+    Magnum::Trade)
 
 target_link_libraries(Game PRIVATE ecs)
 
