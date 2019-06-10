@@ -2,19 +2,27 @@ project(Game)
 add_executable(Game)
 
 # Strict Compilation
-set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS ON)
+set_directory_properties(PROPERTIES CORRADE_USE_PEDANTIC_FLAGS OFF)
 
 # Dependencies
 find_package(Magnum REQUIRED
     GL
     Shaders
-    Sdl2Application)
+    Sdl2Application
+    MeshTools
+    Primitives
+    Trade)
 
 target_link_libraries(Game PRIVATE
     Magnum::Application
     Magnum::GL
     Magnum::Shaders
+    Magnum::MeshTools
+    Magnum::Primitives
+    Magnum::Trade
     Magnum::Magnum)
+
+target_link_libraries(Game PRIVATE ecs)
 
 # Includes
 target_include_directories(Game
@@ -29,6 +37,8 @@ target_include_directories(Game
 target_sources(Game
     PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/BouncingBalls.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/src/Systems/SpriteRenderSystem.cpp
 )
 
 # Copy SDL2 DLL to output folder on Windows

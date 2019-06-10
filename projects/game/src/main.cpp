@@ -1,13 +1,18 @@
-#include <Magnum/GL/DefaultFramebuffer.h>
+#include "BouncingBalls.hpp"
+
 #include <Magnum/Platform/Sdl2Application.h>
 
-#include <Magnum/GL/Buffer.h>
 #include <Magnum/GL/DefaultFramebuffer.h>
+#include <Magnum/GL/Buffer.h>
 #include <Magnum/GL/Mesh.h>
-#include <Magnum/Platform/Sdl2Application.h>
-#include <Magnum/Shaders/VertexColor.h>
+#include <Magnum/Shaders/Flat.h>
+#include <Magnum/MeshTools/Compile.h>
+#include <Magnum/Trade/MeshData2D.h>
+#include <Magnum/Primitives/Circle.h>
+#include <Magnum/Primitives/Square.h>
 
 using namespace Magnum;
+using namespace Math::Literals;
 
 class MyApplication: public Platform::Application
 {
@@ -15,46 +20,66 @@ class MyApplication: public Platform::Application
         explicit MyApplication(const Arguments& arguments);
 
     private:
+        void viewportEvent(ViewportEvent& event) override;
+        void mouseMoveEvent(MouseMoveEvent& event) override;
         void drawEvent() override;
 
-        GL::Mesh _mesh;
-        Shaders::VertexColor2D _shader;
+        Vector2i mouseScreenSpacePosition() const;
+
+        Matrix3 _cameraProjection;
+        Vector2i _mousePosition;
+
+        GameContext _context;
+        BouncingBalls _bouncingBalls{_context};
 };
 
 MyApplication::MyApplication(const Arguments& arguments)
     : Platform::Application{arguments}
 {
-    using namespace Math::Literals;
+    _context.viewportSize = framebufferSize();
+    _cameraProjection = Matrix3::projection({static_cast<Vector2>(_context.viewportSize)});
 
-    struct TriangleVertex
-    {
-        Vector2 position;
-        Color3 color;
-    };
+    _bouncingBalls.init();
 
-    const TriangleVertex data[]
-    {
-        {{-0.5f, -0.5f}, 0xff0000_rgbf},    /* Left vertex, red color */
-        {{ 0.5f, -0.5f}, 0x00ff00_rgbf},    /* Right vertex, green color */
-        {{ 0.0f,  0.5f}, 0x0000ff_rgbf}     /* Top vertex, blue color */
-    };
+    #ifndef CORRADE_TARGET_EMSCRIPTEN
+        setSwapInterval(1);
+    #endif
 
-    GL::Buffer buffer;
-    buffer.setData(data);
+    #if !defined(CORRADE_TARGET_EMSCRIPTEN) && !defined(CORRADE_TARGET_ANDROID)
+        setMinimalLoopPeriod(16);
+    #endif
+}
 
-    _mesh.setCount(3)
-         .addVertexBuffer(std::move(buffer), 0,
-            Shaders::VertexColor2D::Position{},
-            Shaders::VertexColor2D::Color3{});
+void MyApplication::mouseMoveEvent(MouseMoveEvent& event)
+{
+    _mousePosition = event.position();
+}
+
+void MyApplication::viewportEvent(ViewportEvent& event)
+{
+    _context.viewportSize = event.framebufferSize();
+    GL::defaultFramebuffer.setViewport({{}, _context.viewportSize});
+    _cameraProjection = Matrix3::projection({static_cast<Vector2>(_context.viewportSize)});
 }
 
 void MyApplication::drawEvent()
 {
+    _context.mousePosition = mouseScreenSpacePosition();
+    _bouncingBalls.tick();
+
     GL::defaultFramebuffer.clear(GL::FramebufferClear::Color);
-
-    _mesh.draw(_shader);
-
+    _bouncingBalls.render(_cameraProjection);
     swapBuffers();
+    redraw();
+}
+
+Vector2i MyApplication::mouseScreenSpacePosition() const
+{
+    return Vector2i
+    {
+        _mousePosition.x(),
+        framebufferSize().y() - _mousePosition.y()
+    };
 }
 
 MAGNUM_APPLICATION_MAIN(MyApplication)
