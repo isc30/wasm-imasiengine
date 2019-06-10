@@ -3,7 +3,7 @@
 	url = https://github.com/Crascit/DownloadProject.git
 [submodule "thirdparty/corrade"]
 	path = thirdparty/corrade
-	url = git://github.com/mosra/corrade.git
+	url = https://github.com/mosra/corrade.git
 [submodule "thirdparty/magnum"]
 	path = thirdparty/magnum
-	url = git://github.com/mosra/magnum.git
+	url = https://github.com/mosra/magnum.git
