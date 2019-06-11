@@ -41,8 +41,10 @@ matrix:
         apt:
           sources:
             - llvm-toolchain-trusty-8
+            - ubuntu-toolchain-r-test
           packages:
             - clang-8
+            - g++-9
             - libsdl2-dev
       env:
         - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
