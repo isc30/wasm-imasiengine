@@ -16,7 +16,11 @@ endif()
 add_subdirectory(corrade)
 
 # Magnum
-set(WITH_SDL2APPLICATION ON CACHE BOOL "Force SDL application")
+if(EMSCRIPTEN)
+    set(WITH_EMSCRIPTENAPPLICATION ON CACHE BOOL "Force Emscripten application")
+else()
+    set(WITH_SDL2APPLICATION ON CACHE BOOL "Force SDL application")
+endif()
 add_subdirectory(magnum)
 
 # DownloadProject
