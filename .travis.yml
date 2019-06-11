@@ -52,6 +52,9 @@ matrix:
 # Configure Environment
 before_install:
   - eval "${MATRIX_EVAL}"
+  - export TRAVIS_COMPILER=${CXX}
+  - export CXX_FOR_BUILD=${CXX}
+  - export CC_FOR_BUILD=${CC}
 
 # Configure
 before_script:
