@@ -51,11 +51,11 @@ matrix:
 
 # Configure Environment
 before_install:
-  - CC=${CC_COMPILER}
-  - CCX=${CXX_COMPILER}
-  - CC_FOR_BUILD=${CC_COMPILER}
-  - CXX_FOR_BUILD=${CXX_COMPILER}
-  - TRAVIS_COMPILER=${CXX_COMPILER}
+  - export CC=${CC_COMPILER}
+  - export CXX=${CXX_COMPILER}
+  - export CC_FOR_BUILD=${CC_COMPILER}
+  - export CXX_FOR_BUILD=${CXX_COMPILER}
+  - export TRAVIS_COMPILER=${CXX_COMPILER}
 
 # Build
 script:
