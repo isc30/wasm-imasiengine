@@ -26,8 +26,8 @@ matrix:
             - g++-9
             - libsdl2-dev
       env:
-        - CCC_FOR_BUILD="gcc-9"
-        - CXX_FOR_BUILD="g++-9"
+        - CC_COMPILER="gcc-9"
+        - CXX_COMPILER="g++-9"
         - TARGET="GCC"
 
     # Clang 8 Environment
@@ -45,17 +45,19 @@ matrix:
             - g++-9
             - libsdl2-dev
       env:
-        - CCC_FOR_BUILD="clang-8"
-        - CXX_FOR_BUILD="clang++-8"
+        - CC_COMPILER="clang-8"
+        - CXX_COMPILER="clang++-8"
         - TARGET="CLANG"
 
 # Configure Environment
 before_install:
-  - export CC=${CC_FOR_BUILD}
-  - export CCX=${CCX_FOR_BUILD}
-  - export TRAVIS_COMPILER=${CXX}
+  - export CC=${CC_COMPILER}
+  - export CCX=${CXX_COMPILER}
+  - export CC_FOR_BUILD=${CC_COMPILER}
+  - export CXX_FOR_BUILD=${CXX_COMPILER}
+  - export TRAVIS_COMPILER=${CXX_COMPILER}
 
 # Build
 script:
-  - if [ "$TARGET" == "GCC" ] then ./ci/travis-default.sh; fi
-  - if [ "$TARGET" == "CLANG" ] then ./ci/travis-default.sh; fi
+  - if [ "$TARGET" == "GCC" ]; then bash ./ci/travis-default.sh; fi
+  - if [ "$TARGET" == "CLANG" ]; then bash ./ci/travis-default.sh; fi
