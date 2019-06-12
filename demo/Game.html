@@ -1,21 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Magnum Emscripten Application</title>
-  <link rel="stylesheet" href="WebApplication.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <title>Magnum Emscripten Application</title>
+    <link rel="stylesheet" href="WebApplication.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-  <h1>Game</h1>
-  <div id="container">
-    <div id="sizer"><div id="expander"><div id="listener">
-      <canvas id="canvas"></canvas>
-      <div id="status">Initialization...</div>
-      <div id="status-description"></div>
-      <script src="EmscriptenApplication.js"></script>
-      <script async="async" src="Game.js"></script>
-    </div></div></div>
-  </div>
+    <h1>Game</h1>
+    <div id="container">
+        <div id="sizer">
+            <div id="expander"><div id="listener">
+                <canvas id="canvas"></canvas>
+                <div id="status">Initialization...</div>
+                <div id="status-description"></div>
+                <script src="EmscriptenApplication.js"></script>
+                <script async="async" src="Game.js"></script>
+            </div></div>
+        </div>
+    </div>
+    <div id="console"></div>
+    <style>
+        #console {
+            margin: 0 auto;
+
+            background-color: black;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            text-align: left;
+
+            width: 50em; max-width: 50em;
+            height: 25em; max-height: 25em;
+            overflow-y: scroll;
+        }
+
+        #console p {
+            margin: 0 1em;
+        }
+
+        #console p:first-child {
+            padding-top: 1em;
+        }
+
+        #console p:last-child {
+            padding-bottom: 1em;
+        }
+
+        #console .log {
+            color: white;
+        }
+
+        #console .info {
+            color: gray;
+        }
+
+        #console .debug {
+            color: slateblue;
+        }
+
+        #console .error {
+            color: red;
+        }
+    </style>
+    <script>
+        if (typeof console != 'undefined')
+        {
+            function wrapConsole(consoleFunction, className)
+            {
+                function printMessage(message)
+                {
+                    if (typeof consoleFunction === 'function')
+                    {
+                        consoleFunction(message);
+                    }
+
+                    message = message.replace(/\t/g, "    ");
+                    message = message.replace(/  /g, "&nbsp; ");
+
+                    child = document.createElement('p');
+                    child.className = className;
+                    child.innerHTML = message;
+
+                    consoleElement = document.getElementById('console');
+                    consoleElement.appendChild(child);
+
+                    setTimeout(function()
+                    {
+                        consoleElement.scrollTop = consoleElement.scrollHeight;
+                    }, 0);
+                }
+
+                return printMessage;
+            }
+
+            console.log = wrapConsole(console.log, "log");
+            console.debug = wrapConsole(console.debug, "debug");
+            console.info = wrapConsole(console.info, "info");
+            console.error = wrapConsole(console.error, "error");
+        }
+    </script>
 </body>
 </html>
