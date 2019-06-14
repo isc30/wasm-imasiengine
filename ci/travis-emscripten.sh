@@ -14,7 +14,7 @@ cmake .. \
     -DWITH_TESTSUITE=OFF \
     -DWITH_UTILITY=OFF
 
-cmake --install .
+cmake --build . --target install
 
 cd ..
 
