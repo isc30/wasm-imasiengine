@@ -16,7 +16,7 @@ cmake .. \
 
 cmake --build . --target install
 
-cd ..\..
+cd ../..
 
 # Build using Emscripten toolchain
 cmake . \
