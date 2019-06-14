@@ -53,26 +53,21 @@ matrix:
 
     # Emscripten Environment
     - name: emscripten
-      os: osx
-      osx_image: xcode9.3
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - make
+            - g++-9
+            - libsdl2-dev
       env:
+        - CC_COMPILER="gcc-9"
+        - CXX_COMPILER="g++-9"
         - TARGET="EMSCRIPTEN"
-    #   os: linux
-    #   dist: xenial
-    #   sudo: required
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #       packages:
-    #         - make
-    #         - g++-9
-    #         - libsdl2-dev
-    #         - emscripten
-    #   env:
-    #     - CC_COMPILER="gcc-9"
-    #     - CXX_COMPILER="g++-9"
-    #     - TARGET="EMSCRIPTEN"
 
 # Configure Environment
 before_install:
