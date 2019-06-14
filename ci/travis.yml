@@ -63,7 +63,6 @@ matrix:
           packages:
             - make
             - g++-9
-            - libsdl2-dev
       env:
         - CC_COMPILER="gcc-9"
         - CXX_COMPILER="g++-9"

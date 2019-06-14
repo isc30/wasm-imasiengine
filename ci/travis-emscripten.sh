@@ -18,6 +18,7 @@ cd corrade
     cd ..
 cd ..
 
+# Get emscripten and add it to the PATH
 wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
 tar -xzf emsdk-portable.tar.gz
 cd emsdk-portable
