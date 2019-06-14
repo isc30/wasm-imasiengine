@@ -49,6 +49,24 @@ matrix:
         - CXX_COMPILER="clang++-8"
         - TARGET="CLANG"
 
+    # Emscripten Environment
+    - name: emscripten
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - emscripten
+            - g++-9
+            - libsdl2-dev
+      env:
+        - CC_COMPILER="gcc-9"
+        - CXX_COMPILER="g++-9"
+        - TARGET="EMSCRIPTEN"
+
 # Configure Environment
 before_install:
   - export CC=${CC_COMPILER}
@@ -61,3 +79,4 @@ before_install:
 script:
   - if [ "$TARGET" == "GCC" ]; then bash ./ci/travis-default.sh; fi
   - if [ "$TARGET" == "CLANG" ]; then bash ./ci/travis-default.sh; fi
+  - if [ "$TARGET" == "EMSCRIPTEN" ]; then bash ./ci/travis-emscripten.sh; fi
