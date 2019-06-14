@@ -1,7 +1,10 @@
 #!/bin/bash
 
-mkdir build && cd build
-mkdir emscripten && cd emscripten
+mkdir build
+cd build
+
+mkdir emscripten
+cd emscripten
 
 # Build native corrade-rc
 git clone --depth 1 git://github.com/mosra/corrade.git
