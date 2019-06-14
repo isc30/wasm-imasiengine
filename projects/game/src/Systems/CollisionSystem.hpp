@@ -58,8 +58,8 @@ class CollisionSystem
 
                     if (collisionHappened)
                     {
-                        //physics.mass += 1;
-                        //transform.scale = Vector2{physics.mass, physics.mass};
+                        // transform.scale.x() += 1;
+                        // transform.scale.y() += 1;
                     }
                 });
         }

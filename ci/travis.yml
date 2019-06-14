@@ -1,5 +1,8 @@
 language: cpp
 
+notifications:
+  email: false
+
 # Use Latest CMake
 addons:
   apt:
@@ -61,11 +64,8 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - make
-            - g++-9
+            - docker
       env:
-        - CC_COMPILER="gcc-9"
-        - CXX_COMPILER="g++-9"
         - TARGET="EMSCRIPTEN"
 
 # Configure Environment

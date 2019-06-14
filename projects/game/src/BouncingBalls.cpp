@@ -55,7 +55,6 @@ void BouncingBalls::createRandomBall()
         PhysicsComponent{
             Vector2{direction_x, direction_y}.normalized(),
             speed,
-            mass
         });
 }
 
