@@ -8,6 +8,5 @@ services:
             - ".:/src"
         command: |
             /bin/bash -c "
-                cd buildd/emscripten
-                bash emscripten-build.sh
+                bash docker/emscripten-build.sh
             "
