@@ -20,15 +20,13 @@ cmake --build . --target install
 
 cd ../..
 
-wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
-
-
 # Build using Emscripten toolchain
 cmake . \
     -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
-    -DCMAKE_TOOLCHAIN_FILE=./toolchains/generic/Emscripten-wasm.cmake
+    -DCMAKE_TOOLCHAIN_FILE=./toolchains/generic/Emscripten-wasm.cmake \
+    -DEMSCRIPTEN_PREFIX=$(echo /usr/local/Cellar/emscripten/*/libexec)
 
 cmake --build .
 
