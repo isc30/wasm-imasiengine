@@ -1,5 +1,7 @@
 #!/bin/bash
 
+HOMEBREW_NO_AUTO_UPDATE=1 brew install emscripten && export LLVM=/usr/local/opt/emscripten/libexec/llvm/bin && emcc
+
 # Corrade
 git clone --depth 1 git://github.com/mosra/corrade.git
 cd corrade
@@ -17,6 +19,9 @@ cmake .. \
 cmake --build . --target install
 
 cd ../..
+
+wget https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
+
 
 # Build using Emscripten toolchain
 cmake . \
