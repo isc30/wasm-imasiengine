@@ -21,9 +21,9 @@ cd ..
 # Build using Emscripten toolchain
 cmake . \
     -DCMAKE_CXX_FLAGS="-Wall -pedantic -Werror -Wno-variadic-macros -Wno-long-long -Wno-shadow" \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
-    -DCMAKE_TOOLCHAIN_FILE=toolchains/generic/Emscripten-wasm.cmake \
-    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_TOOLCHAIN_FILE=./toolchains/generic/Emscripten-wasm.cmake
 
 cmake --build .
 
