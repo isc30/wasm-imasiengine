@@ -7,16 +7,13 @@ struct PhysicsComponent
 {
     Magnum::Vector2 direction;
     float speed;
-    float mass;
 
     explicit PhysicsComponent(
         Magnum::Vector2 direction,
-        float speed,
-        float mass)
+        float speed)
 
         : direction{direction}
         , speed{speed}
-        , mass{mass}
     {
     }
 };

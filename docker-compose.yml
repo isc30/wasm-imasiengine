@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+    emscripten-build:
+        image: "trzeci/emscripten"
+        volumes:
+            - ".:/src"
+        command: |
+            /bin/bash -c "
+                cd /src
+                bash docker/emscripten-build.sh
+            "

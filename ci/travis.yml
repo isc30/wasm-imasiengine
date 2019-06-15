@@ -1,0 +1,83 @@
+language: cpp
+
+notifications:
+  email: false
+
+# Use Latest CMake
+addons:
+  apt:
+    sources:
+      - george-edison55-precise-backports
+    packages:
+      - cmake-data
+      - cmake
+
+# Build Agents
+matrix:
+  include:
+
+    # Gcc 9 Environment
+    - name: gcc 9
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - make
+            - g++-9
+            - libsdl2-dev
+      env:
+        - CC_COMPILER="gcc-9"
+        - CXX_COMPILER="g++-9"
+        - TARGET="GCC"
+
+    # Clang 8 Environment
+    - name: clang 8
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-8
+            - ubuntu-toolchain-r-test
+          packages:
+            - make
+            - g++-9
+            - libsdl2-dev
+            - clang-8
+      env:
+        - CC_COMPILER="clang-8"
+        - CXX_COMPILER="clang++-8"
+        - TARGET="CLANG"
+
+    # Emscripten Environment
+    - name: emscripten
+      os: linux
+      dist: xenial
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - docker-ce
+      env:
+        - TARGET="EMSCRIPTEN"
+
+# Configure Environment
+before_install:
+  - export CC=${CC_COMPILER}
+  - export CXX=${CXX_COMPILER}
+  - export CC_FOR_BUILD=${CC_COMPILER}
+  - export CXX_FOR_BUILD=${CXX_COMPILER}
+  - export TRAVIS_COMPILER=${CXX_COMPILER}
+
+# Build
+script:
+  - if [ "$TARGET" == "GCC" ]; then bash ./ci/travis-default.sh; fi
+  - if [ "$TARGET" == "CLANG" ]; then bash ./ci/travis-default.sh; fi
+  - if [ "$TARGET" == "EMSCRIPTEN" ]; then bash ./ci/travis-emscripten.sh; fi
